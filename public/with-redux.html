@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.2.0/redux.js"></script>
+    </head>
+    <body>
+        <style>
+            .container{
+                border: 5px solid black;
+                padding: 10px;
+            }
+        </style>
+        <div id="red"></div>
+        <div id="green"></div>
+        <div id="blue"></div>
+
+        <script>
+            function reducer(state, action){
+                console.log(state, action)
+                //스토어를 처음만들때, 스테이트값의 초기값이 필요함
+                if(state === undefined){
+                    //초기 스테이트값은 없을때니 컬러는 엘로우로 값을 정의해줌
+                    return {color : 'yellow'}
+                }
+                var newState;
+                if(action.type === 'CHANGE_COLOR'){
+                    newState = Object.assign({}, state, {color:action.color});
+                }
+                return newState;
+            }
+            var store = Redux.createStore(reducer,
+            window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+        
+            function red(){
+                var state = store.getState();
+                document.querySelector('#red').innerHTML=`
+                    <div class="container" id="componet_red" style="background-color:${state.color}">
+                        <h1>red</h1>
+                        <input type="button" value="fire" onclick="
+                            store.dispatch({
+                                type:'CHANGE_COLOR',
+                                color:'red'
+                            });
+                        ">
+                    </div>`;
+            }
+            //스테이트값이 바뀔때마다(디스패치될때) 함수호출시킴 
+            //서브스크라이브에 렌더 등록
+            store.subscribe(red);
+            red();
+
+            function blue(){
+                var state = store.getState();
+                document.querySelector('#blue').innerHTML=`
+                    <div class="container" id="componet_blue" style="background-color:${state.color}">
+                        <h1>blue</h1>
+                        <input type="button" value="fire" onclick="
+                            store.dispatch({
+                                type:'CHANGE_COLOR',
+                                color:'blue'
+                            });
+                        ">
+                    </div>`;
+            }
+            //스테이트값이 바뀔때마다(디스패치될때) 함수호출시킴 
+            //서브스크라이브에 렌더 등록 스토어에 구독
+            store.subscribe(blue);
+            blue();
+
+            function green(){
+                var state = store.getState();
+                document.querySelector('#green').innerHTML=`
+                    <div class="container" id="componet_green" style="background-color:${state.color}">
+                        <h1>green</h1>
+                        <input type="button" value="fire" onclick="
+                            store.dispatch({
+                                type:'CHANGE_COLOR',
+                                color:'green'
+                            });
+                        ">
+                    </div>`;
+            }
+            //스테이트값이 바뀔때마다(디스패치될때) 함수호출시킴 
+            //서브스크라이브에 렌더 등록 스토어에 구독
+            store.subscribe(green);
+            green();
+        </script>
+    </body>
+</html>
